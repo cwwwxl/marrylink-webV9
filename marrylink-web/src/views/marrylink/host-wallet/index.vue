@@ -237,7 +237,7 @@ function handleApprove(id) {
     cancelButtonText: '取消',
     type: 'info'
   }).then(async () => {
-    await auditWithdrawal(id, { status: 2 })
+    await auditWithdrawal(id, { action: 'approve' })
     ElMessage.success('审核通过')
     fetchWithdrawalData()
   })
@@ -265,7 +265,7 @@ function handleReject(id) {
 function handleSubmitReject() {
   rejectFormRef.value.validate(async (valid) => {
     if (valid) {
-      await auditWithdrawal(rejectDialog.withdrawalId, { status: 3, reason: rejectForm.reason })
+      await auditWithdrawal(rejectDialog.withdrawalId, { action: 'reject', rejectReason: rejectForm.reason })
       ElMessage.success('已拒绝')
       rejectDialog.visible = false
       fetchWithdrawalData()
@@ -279,7 +279,7 @@ function handleConfirmPay(id) {
     cancelButtonText: '取消',
     type: 'info'
   }).then(async () => {
-    await auditWithdrawal(id, { status: 4 })
+    await auditWithdrawal(id, { action: 'confirm_payment' })
     ElMessage.success('已确认打款')
     fetchWithdrawalData()
   })
