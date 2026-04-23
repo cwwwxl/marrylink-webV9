@@ -32,8 +32,13 @@ public class PlatformSettingsController {
      */
     @PutMapping("/update")
     public Result<Void> update(@RequestBody Map<String, Object> params) {
-        String settingKey = params.get("settingKey").toString();
-        String settingValue = params.get("settingValue").toString();
+        Object settingKeyObj = params.get("settingKey");
+        Object settingValueObj = params.get("settingValue");
+        if (settingKeyObj == null || settingValueObj == null) {
+            return Result.error("参数缺失：settingKey 和 settingValue 不能为空");
+        }
+        String settingKey = settingKeyObj.toString();
+        String settingValue = settingValueObj.toString();
 
         LambdaQueryWrapper<PlatformSettings> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(PlatformSettings::getSettingKey, settingKey);

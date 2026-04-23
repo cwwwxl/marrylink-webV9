@@ -81,8 +81,12 @@ function handleSave() {
       loading.value = true
       try {
         await updatePlatformSetting({
-          commissionRate: formData.commissionRate,
-          commissionDeadlineDays: formData.commissionDeadlineDays
+          settingKey: 'commission_rate',
+          settingValue: String(formData.commissionRate)
+        })
+        await updatePlatformSetting({
+          settingKey: 'commission_deadline_days',
+          settingValue: String(formData.commissionDeadlineDays)
         })
         ElMessage.success('保存成功')
       } finally {
