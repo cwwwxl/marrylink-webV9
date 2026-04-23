@@ -123,14 +123,14 @@ public class SettlementController {
             wallet.setHostId(order.getHostId());
             wallet.setBalance(escrowAmount);
             wallet.setFrozenAmount(commissionAmount);
-            wallet.setTotalIncome(totalOrderAmount);
+            wallet.setTotalIncome(escrowAmount);  // 累计收入记录实际到账金额（30%定金）
             wallet.setTotalCommission(BigDecimal.ZERO);
             wallet.setTotalWithdrawn(BigDecimal.ZERO);
             hostWalletService.save(wallet);
         } else {
             wallet.setBalance(wallet.getBalance().add(escrowAmount));
             wallet.setFrozenAmount(wallet.getFrozenAmount().add(commissionAmount));
-            wallet.setTotalIncome(wallet.getTotalIncome().add(totalOrderAmount));
+            wallet.setTotalIncome(wallet.getTotalIncome().add(escrowAmount));  // 累计实际到账（30%定金）
             hostWalletService.updateById(wallet);
         }
 
