@@ -138,7 +138,8 @@ export default {
         { label: '户外婚礼', value: '04' }
       ],
       payLoading: false,
-      paySuccess: false
+      paySuccess: false,
+      hostBanned: false
     }
   },
 
@@ -199,6 +200,18 @@ export default {
         this.hostInfo = res.data || {}
         if (res.data && res.data.price) {
           this.totalPrice = res.data.price
+        }
+        if (res.data.canAcceptOrder === 0) {
+          this.hostBanned = true
+          uni.showModal({
+            title: '提示',
+            content: '该主持人暂时无法接单，请选择其他主持人',
+            showCancel: false,
+            confirmText: '返回',
+            success: () => {
+              uni.navigateBack()
+            }
+          })
         }
       } catch (error) {
         console.error('加载主持人信息失败:', error)

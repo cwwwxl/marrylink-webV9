@@ -43,7 +43,9 @@ public class CommissionController {
             @RequestParam(defaultValue = "10") Long size,
             @RequestParam(required = false) Integer status,
             @RequestParam(required = false) Long hostId,
-            @RequestParam(required = false) String orderNo) {
+            @RequestParam(required = false) String orderNo,
+            @RequestParam(required = false) String commissionNo,
+            @RequestParam(required = false) String hostName) {
 
         Page<CommissionOrder> page = new Page<>(current, size);
         LambdaQueryWrapper<CommissionOrder> wrapper = new LambdaQueryWrapper<>();
@@ -60,6 +62,12 @@ public class CommissionController {
         }
         if (orderNo != null && !orderNo.isEmpty()) {
             wrapper.like(CommissionOrder::getOrderNo, orderNo);
+        }
+        if (commissionNo != null && !commissionNo.isEmpty()) {
+            wrapper.like(CommissionOrder::getCommissionNo, commissionNo);
+        }
+        if (hostName != null && !hostName.isEmpty()) {
+            wrapper.like(CommissionOrder::getHostName, hostName);
         }
 
         wrapper.orderByDesc(CommissionOrder::getCreateTime);

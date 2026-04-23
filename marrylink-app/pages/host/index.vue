@@ -54,7 +54,10 @@
         <image class="host-avatar" :src="host.avatar ? BASE_URL + host.avatar : '/static/default-avatar.png'" mode="aspectFill"></image>
         <view class="host-info">
           <view class="host-header">
-            <text class="host-name">{{ host.name }}</text>
+            <view style="display: flex; align-items: center;">
+              <text class="host-name">{{ host.name }}</text>
+              <text v-if="host.canAcceptOrder === 0" class="ban-badge">暂停接单</text>
+            </view>
             <view class="host-rating">
               <text class="rating-star">⭐</text>
               <text class="rating-score">{{ host.rating || '5.0' }}</text>
@@ -406,7 +409,16 @@ export default {
           font-weight: bold;
           color: #333333;
         }
-        
+
+        .ban-badge {
+          font-size: 20rpx;
+          color: #ffffff;
+          background-color: #ef4444;
+          padding: 4rpx 12rpx;
+          border-radius: 8rpx;
+          margin-left: 12rpx;
+        }
+
         .host-rating {
           display: flex;
           margin-right: 20rpx;

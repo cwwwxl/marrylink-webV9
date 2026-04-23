@@ -147,8 +147,13 @@ public class PlatformFinanceController {
             platformAccountService.updateById(account);
         }
 
-        // 删除提现记录
-        platformWithdrawalService.removeById(id);
+        // 更新提现状态为已取消
+        PlatformWithdrawal update = new PlatformWithdrawal();
+        update.setId(id);
+        update.setStatus(3); // 已取消
+        update.setCompleteTime(LocalDateTime.now());
+        update.setOperator(SecurityUtils.getCurrentUsername());
+        platformWithdrawalService.updateById(update);
 
         return Result.ok();
     }

@@ -65,7 +65,7 @@
         <el-table-column label="截止日期" prop="deadline" width="170" />
         <el-table-column label="支付时间" prop="payTime" width="170" />
         <el-table-column label="创建时间" prop="createTime" width="170" />
-        <el-table-column label="操作" fixed="right" width="260">
+        <el-table-column label="操作" fixed="right" width="280">
           <template #default="scope">
             <el-button type="primary" icon="view" link size="small" @click="handleView(scope.row.id)">
               查看
@@ -80,12 +80,21 @@
               标记逾期
             </el-button>
             <el-button
+              v-if="scope.row.status === 3"
               type="danger"
               link
               size="small"
               @click="handleBanHost(scope.row.hostId)"
             >
               禁止接单
+            </el-button>
+            <el-button
+              type="success"
+              link
+              size="small"
+              @click="handleUnbanHost(scope.row.hostId)"
+            >
+              解禁接单
             </el-button>
           </template>
         </el-table-column>
@@ -129,7 +138,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Pagination from '@/components/Pagination/index.vue'
-import { getCommissionPage, getCommissionById, markCommissionOverdue, banHost } from '@/api/marrylink-api'
+import { getCommissionPage, getCommissionById, markCommissionOverdue, banHost, unbanHost } from '@/api/marrylink-api'
 
 const queryParams = reactive({
   current: 1,
@@ -227,6 +236,22 @@ function handleBanHost(hostId) {
     await banHost(hostId)
     ElMessage.success('已禁止接单')
     fetchData()
+  })
+}
+
+function handleUnbanHost(hostId) {
+  ElMessageBox.confirm('确认解禁该主持人接单?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'info'
+  }).then(async () => {
+    try {
+      await unbanHost(hostId)
+      ElMessage.success('已解禁接单')
+      fetchData()
+    } catch (e) {
+      // error handled by request interceptor
+    }
   })
 }
 

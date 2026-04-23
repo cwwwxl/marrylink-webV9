@@ -42,6 +42,7 @@
           <el-select v-model="queryParams.status" placeholder="全部状态" clearable style="width: 140px;" @change="handleQuery">
             <el-option label="待处理" :value="1" />
             <el-option label="已完成" :value="2" />
+            <el-option label="已取消" :value="3" />
           </el-select>
         </div>
       </template>
@@ -58,8 +59,8 @@
         <el-table-column label="户名" prop="accountName" width="120" />
         <el-table-column label="状态" width="100">
           <template #default="scope">
-            <el-tag :type="scope.row.status === 1 ? 'warning' : 'success'">
-              {{ scope.row.status === 1 ? '待处理' : '已完成' }}
+            <el-tag :type="scope.row.status === 1 ? 'warning' : scope.row.status === 2 ? 'success' : 'danger'">
+              {{ scope.row.status === 1 ? '待处理' : scope.row.status === 2 ? '已完成' : '已取消' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -73,7 +74,8 @@
               <el-button type="success" link size="small" @click="handleComplete(scope.row.id)">确认完成</el-button>
               <el-button type="danger" link size="small" @click="handleCancel(scope.row.id)">取消</el-button>
             </template>
-            <span v-else style="color: #999;">已处理</span>
+            <span v-else-if="scope.row.status === 2" style="color: #999;">已处理</span>
+            <span v-else style="color: #f56c6c;">已取消</span>
           </template>
         </el-table-column>
       </el-table>

@@ -1,6 +1,10 @@
 <template>
   <view class="detail-container">
     <scroll-view class="detail-scroll" scroll-y>
+      <!-- 暂停接单提示 -->
+      <view v-if="hostInfo.canAcceptOrder === 0" class="ban-banner">
+        <text class="ban-banner-text">该主持人暂时无法接单，请选择其他主持人</text>
+      </view>
       <!-- 主持人头部信息 -->
       <view class="host-header">
         <image class="host-avatar" :src="hostAvatarUrl" mode="aspectFill"></image>
@@ -118,7 +122,8 @@
         <text class="btn-icon">💬</text>
         <text class="btn-text">沟通</text>
       </view>
-      <button class="book-btn" @click="handleBook">立即预约</button>
+      <button v-if="hostInfo.canAcceptOrder === 0" class="book-btn disabled" disabled>暂停接单</button>
+      <button v-else class="book-btn" @click="handleBook">立即预约</button>
     </view>
   </view>
 </template>
@@ -357,6 +362,19 @@ export default {
 
 .detail-scroll {
   height: calc(100vh - 120rpx);
+}
+
+.ban-banner {
+  background-color: #fef2f2;
+  border-left: 8rpx solid #ef4444;
+  padding: 24rpx 32rpx;
+  margin-bottom: 20rpx;
+
+  .ban-banner-text {
+    font-size: 28rpx;
+    color: #ef4444;
+    font-weight: 500;
+  }
 }
 
 .host-header {
@@ -757,6 +775,11 @@ export default {
     font-size: 32rpx;
     font-weight: bold;
     line-height: 80rpx;
+
+    &.disabled {
+      background-color: #c0c4cc;
+      color: #ffffff;
+    }
   }
 }
 </style>

@@ -312,7 +312,6 @@ function handleResetQuery() {
 }
 
 async function handleOpenDialog(id) {
-  console.log(this.userStore.user)
   dialog.visible = true
   if (id) {
     dialog.title = '编辑主持人'
